@@ -3,6 +3,7 @@ import { Layout } from "./components/layout/layout";
 import Register from "./pages/auth/register";
 import Login from "./pages/auth/login";
 import { Dashboard } from "./pages/dashboard/dashboard";
+import CreateDepartment from "./pages/department/department";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />
+      },
+      {
+        path: "/departments",
+        element: <CreateDepartment />
       },
       {
         path: "*", 

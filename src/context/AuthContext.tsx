@@ -37,8 +37,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
-    removeCookie('token'); // Removendo o token do cookie
-    setIsAuthenticated(false); // Atualizando o estado de autenticação
+    removeCookie('token'); 
+    setIsAuthenticated(false); 
   };
 
   return (
@@ -62,10 +62,10 @@ export function Dashboard() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redireciona para a página de login após o logout
+    navigate('/login'); 
   };
 
-  // Verifica se o usuário está autenticado, se não estiver, redireciona para /login
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');

@@ -30,23 +30,29 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem
   }
-  .dark {
-    --background: 19 8% 8%;
-    --foreground: 0 0% 100%; 
-    --card: 25 10% 15%;
-    --card-foreground: 0 0% 100%; 
-    --popover: 20 10% 20%; 
-    --popover-foreground: 0 0% 100%; 
-    --primary: 210 100% 50%; 
-    --primary-foreground: 0 0% 100%; 
-    --secondary: 340 100% 50%; 
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 70%;
-    --muted-foreground: 0 0% 100%; 
-    --accent: 120 100% 40%; /* Verde limão */
-    --accent-foreground: 0 0% 100%; /* Branco */
-    --destructive: 0 100% 50%; /* Vermelho puro */
-    --destructive-foreground: 0 0% 100%; /* Branco */
+.dark {
+  --background: #131313; /* Fundo mais escuro */
+  --foreground: #FFFFFF; /* Texto claro */
+  --card: #222; /* Fundo dos cards */
+  --muted: #B0BEC5; /* Texto secundário */
+  --primary: #1DA1F2; /* Azul para elementos principais */
+  --secondary: #A3E635; /* Verde para botões e destaques */
+}
+
+.text-primary {
+  color: #1DA1F2;
+}
+
+.text-muted-foreground {
+  color: #B0BEC5;
+}
+
+.bg-primary {
+  background-color: #1DA1F2; 
+}
+
+.bg-gray-700 {
+  background-color: #374151; 
 }
 
 }

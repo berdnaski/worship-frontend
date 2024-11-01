@@ -51,35 +51,26 @@ export default function Login() {
 };
 
   return (
-    <div className="grid min-h-screen md:grid-cols-[70%_30%]">
+    <div className="grid min-h-screen md:grid-cols-[70%_30%] bg-[#131313]">
       <div className="relative hidden md:block">
-        <img
-          src={imgCard}
-          alt="Concert scene"
-          className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
-        />
+      <img
+        src={imgCard}
+        alt="Concert scene"
+        className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
+        loading="lazy"
+      />
       </div>
       <div className="flex items-start justify-center px-4 py-10 md:px-8">
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 mt-10">
           <div className="space-y-8">
-            <div className="flex items-center gap-2">
-              <div className="rounded-full bg-gradient-to-br from-pink-300 to-violet-400 p-2">
-                <img
-                  src={imgCard}
-                  alt="UI Unicorn logo"
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-              </div>
-              <h2 className="text-2xl font-semibold text-white">IISC Worship</h2>
+          <div className="flex items-center gap-2">
+            <div className="rounded-full bg-gradient-to-br from-orange-400 to-orange-600 p-4 w-8 h-8 flex items-center justify-center"> 
             </div>
+            <h2 className="text-2xl font-semibold text-white">IISC Worship</h2>
+          </div>
             <p className="text-xl text-white">Que bom ver você aqui de novo!</p>
           </div>
           <div className="space-y-8">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-zinc-400">Nome</Label>
-            </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-zinc-400">Email</Label>
               <Input
@@ -143,7 +134,7 @@ export default function Login() {
             </div>
             <div className="text-center text-sm text-zinc-400">
               Don&apos;t have an account?{" "}
-              <Link to="/sign-up" className="text-blue-400">
+              <Link to="/register" className="text-blue-400">
                 Sign up now
               </Link>
             </div>

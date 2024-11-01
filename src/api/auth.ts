@@ -8,6 +8,7 @@ interface RegisterUserData {
   name: string;
   email: string;
   passwordHash: string;
+  avatarUrl?: string;
 }
 
 export const registerUser = async (userData: RegisterUserData): Promise<RegisterResponse> => {
