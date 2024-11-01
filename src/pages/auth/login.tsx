@@ -8,29 +8,26 @@ import imgCard from "@/assets/img-jv.png";
 import { useAuth } from "@/context/AuthContext";
 
 interface FormData {
-  name: string;
   email: string;
   password: string;
 }
 
-export default function Register() {
+export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    name: "",
     email: "",
     password: "",
   });
 
-  const { register, isAuthenticated, logout } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    if (isAuthenticated) {
-      logout(); 
-      navigate("/login"); 
+    if (isAuthenticated) { 
+      navigate("/dashboard"); 
     }
-  }, [isAuthenticated, navigate, logout]);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,17 +39,14 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    console.log('Dados do Formulário:', formData); 
-  
     try {
-      await register(formData.name, formData.email, formData.password);
-      navigate("/login");
+        await login(formData.email, formData.password);
+        navigate("/dashboard"); 
     } catch (error) {
-      console.error('Erro ao registrar:', error);
-      alert('Erro ao registrar. Verifique os dados e tente novamente.');
+        console.error('Erro ao logar:', error);
+        alert('Erro ao logar. Verifique os dados e tente novamente.');
     }
-  };
+};
 
   return (
     <div className="grid min-h-screen md:grid-cols-[70%_30%]">
@@ -78,20 +72,11 @@ export default function Register() {
               </div>
               <h2 className="text-2xl font-semibold text-white">IISC Worship</h2>
             </div>
-            <p className="text-xl text-white">Que bom ver você aqui!</p>
+            <p className="text-xl text-white">Que bom ver você aqui de novo!</p>
           </div>
           <div className="space-y-8">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-zinc-400">Nome</Label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Insira seu nome..."
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                className="bg-zinc-800 text-white h-11 focus:outline-none focus:ring-2 focus:ring-blue-500 border-none"
-              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-zinc-400">Email</Label>
@@ -136,12 +121,15 @@ export default function Register() {
                   </span>
                 </Button>
               </div>
+              <Link to="/forgot-password" className="block text-sm text-blue-400 text-right mt-2">
+                Forgot password?
+              </Link>
             </div>
             <Button
               type="submit"
               className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold transition-colors duration-300 ease-in-out shadow hover:shadow-lg"
             >
-              Sign up
+              Sign in
             </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -152,9 +140,9 @@ export default function Register() {
               </div>
             </div>
             <div className="text-center text-sm text-zinc-400">
-              You have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link to="/sign-up" className="text-blue-400">
-                Sign in now
+                Sign up now
               </Link>
             </div>
           </div>
