@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import imgCard from "@/assets/img-jv.png";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 interface FormData {
   name: string;
@@ -47,6 +48,7 @@ export default function Register() {
   
     try {
       await register(formData.name, formData.email, formData.password);
+      toast.success("Usuário registrado com sucesso!");
       navigate("/login");
     } catch (error) {
       console.error('Erro ao registrar:', error);

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import imgCard from "@/assets/img-jv.png";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 interface FormData {
   email: string;
@@ -41,6 +42,7 @@ export default function Login() {
     e.preventDefault();
     try {
         await login(formData.email, formData.password);
+        toast.success("Usuário logado com sucesso!");
         navigate("/dashboard"); 
     } catch (error) {
         console.error('Erro ao logar:', error);
