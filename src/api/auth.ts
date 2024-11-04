@@ -11,6 +11,7 @@ interface RegisterUserData {
   avatarUrl?: string;
 }
 
+
 export const registerUser = async (userData: RegisterUserData): Promise<RegisterResponse> => {
   const response = await api.post('/register', userData);
   return response.data;

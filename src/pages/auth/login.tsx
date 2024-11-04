@@ -23,10 +23,9 @@ export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (isAuthenticated) { 
-      navigate("/dashboard"); 
+      navigate("/setup"); 
     }
   }, [isAuthenticated, navigate]);
 
@@ -43,7 +42,7 @@ export default function Login() {
     try {
         await login(formData.email, formData.password);
         toast.success("Usuário logado com sucesso!");
-        navigate("/dashboard"); 
+        navigate("/setup"); 
     } catch (error) {
         console.error('Erro ao logar:', error);
         alert('Erro ao logar. Verifique os dados e tente novamente.');

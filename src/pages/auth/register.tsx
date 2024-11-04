@@ -29,7 +29,7 @@ export default function Register() {
   useEffect(() => {
     if (isAuthenticated) {
       logout(); 
-      navigate("/login"); 
+      navigate("/setup"); 
     }
   }, [isAuthenticated, navigate, logout]);
 
@@ -49,7 +49,7 @@ export default function Register() {
     try {
       await register(formData.name, formData.email, formData.password);
       toast.success("Usuário registrado com sucesso!");
-      navigate("/login");
+      navigate("/setup");
     } catch (error) {
       console.error('Erro ao registrar:', error);
       alert('Erro ao registrar. Verifique os dados e tente novamente.');

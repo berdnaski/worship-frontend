@@ -15,7 +15,7 @@ export interface DepartmentResponse {
   id: string; 
   name: string;
   description: string; 
-  userCount: number; 
+  users: User[];
 }
 
 export async function createDepartment(data: DepartmentFormData) {
