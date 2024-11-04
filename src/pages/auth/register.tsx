@@ -59,12 +59,12 @@ export default function Register() {
   return (
     <div className="grid min-h-screen md:grid-cols-[70%_30%] bg-[#131313]">
       <div className="relative hidden md:block">
-      <img
-        src={imgCard}
-        alt="Concert scene"
-        className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
-        loading="lazy"
-      />
+        <img
+          src={imgCard}
+          alt="Concert scene"
+          className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
+          loading="lazy"
+        />
       </div>
       <div className="flex items-start justify-center px-4 py-10 md:px-8">
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 mt-10">

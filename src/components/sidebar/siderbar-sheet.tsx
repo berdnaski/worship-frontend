@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar } from "@/components/ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { MenuIcon, LogOutIcon } from "lucide-react";
+import { MenuIcon, LogOutIcon, HomeIcon, UsersIcon } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { getUser } from "@/api";
 
 export function SidebarSheet() {
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, userId } = useAuth();
+  const [userData, setUserData] = useState<{ name: string; email: string; avatarUrl?: string } | null>(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -28,8 +30,19 @@ export function SidebarSheet() {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
+    } else if (userId) {
+      const fetchUserData = async () => {
+        try {
+          const user = await getUser(userId); 
+          setUserData(user); 
+        } catch (error) {
+          console.error("Erro ao buscar dados do usuário:", error);
+        }
+      };
+
+      fetchUserData(); 
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, userId, navigate]);
 
   return (
     <Sheet>
@@ -45,19 +58,41 @@ export function SidebarSheet() {
 
         <div className="flex items-center justify-between gap-3 border-b border-solid border-[#444] py-5">
           <div className="flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src={Eu} />
-            </Avatar>
-            <div>
-              <p className="font-bold">Erick</p>
-              <p className="text-xs text-muted-foreground">email@example.com</p> 
-            </div>
+            {userData ? (
+              <>
+                <Avatar>
+                  <AvatarImage src={userData.avatarUrl || Eu} />
+                </Avatar>
+                <div>
+                  <p className="font-bold">{userData.name}</p>
+                  <p className="text-xs text-muted-foreground">{userData.email}</p>
+                </div>
+              </>
+            ) : (
+              <p>Carregando...</p> 
+            )}
           </div>
         </div>
 
         <div className="flex flex-col gap-2 py-5">
           <Button
-            className="justify-start gap-2 text-muted-foreground hover:bg-orange-600 transition" 
+            className="justify-start gap-2 text-muted-foreground hover:bg-orange-600 transition"
+            variant="ghost"
+            onClick={() => navigate('/dashboard')}
+          >
+            <HomeIcon size={18} className="text-muted-foreground" />
+            Dashboard
+          </Button>
+          <Button
+            className="justify-start gap-2 text-muted-foreground hover:bg-orange-600 transition"
+            variant="ghost"
+            onClick={() => navigate('/departments')}
+          >
+            <UsersIcon size={18} className="text-muted-foreground" />
+            Departments
+          </Button>
+          <Button
+            className="justify-start gap-2 text-muted-foreground hover:bg-orange-600 transition"
             variant="ghost"
             onClick={handleLogout}
           >

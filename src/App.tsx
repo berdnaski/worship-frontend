@@ -3,9 +3,10 @@ import { Layout } from "./components/layout/layout";
 import Register from "./pages/auth/register";
 import Login from "./pages/auth/login";
 import { Dashboard } from "./pages/dashboard/dashboard";
-import CreateDepartment from "./pages/department/department";
+import CreateDepartment from "./pages/department/listAll/department";
 import { Setup } from "./pages/setup/setup";
 import SetupRoute from "./routes/protected";
+import DepartmentDetails from "./pages/department/id/departmentId";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/departments",
         element: <CreateDepartment />
+      },
+      {
+        path: "/departments/:departmentId",
+        element: <DepartmentDetails />
       },
       {
         path: "/setup",

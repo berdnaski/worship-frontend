@@ -12,11 +12,6 @@ export function Dashboard() {
   const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');

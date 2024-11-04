@@ -11,6 +11,7 @@ import {
 import { Edit3, MoreVertical, Trash2, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { DepartmentResponse } from "@/api/department";
+import { Link } from "react-router-dom";
 
 interface DepartmentListProps {
   departments: DepartmentResponse[];
@@ -24,7 +25,9 @@ const DepartmentList: React.FC<DepartmentListProps> = ({ departments }) => {
           <CardContent className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
             <div className="flex-1 space-y-1">
               <div className="flex items-center gap-2">
-                <h2 className="font-semibold text-gray-800">{department.name}</h2>
+                <h2 className="font-semibold text-gray-800">
+                  <Link to={`/departments/${department.id}`}>{department.name}</Link>
+                </h2>
                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                   {department.users.length} membros
                 </span>

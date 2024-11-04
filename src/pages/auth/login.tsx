@@ -52,21 +52,21 @@ export default function Login() {
   return (
     <div className="grid min-h-screen md:grid-cols-[70%_30%] bg-[#131313]">
       <div className="relative hidden md:block">
-      <img
-        src={imgCard}
-        alt="Concert scene"
-        className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
-        loading="lazy"
-      />
+        <img
+          src={imgCard}
+          alt="Concert scene"
+          className="absolute inset-0 h-full w-full object-cover brightness-75 filter"
+          loading="lazy"
+        />
       </div>
       <div className="flex items-start justify-center px-4 py-10 md:px-8">
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 mt-10">
           <div className="space-y-8">
-          <div className="flex items-center gap-2">
-            <div className="rounded-full bg-gradient-to-br from-orange-400 to-orange-600 p-4 w-8 h-8 flex items-center justify-center"> 
+            <div className="flex items-center gap-2">
+              <div className="rounded-full bg-gradient-to-br from-orange-400 to-orange-600 p-4 w-8 h-8 flex items-center justify-center"> 
+              </div>
+              <h2 className="text-2xl font-semibold text-white">IISC Worship</h2>
             </div>
-            <h2 className="text-2xl font-semibold text-white">IISC Worship</h2>
-          </div>
             <p className="text-xl text-white">Que bom ver você aqui de novo!</p>
           </div>
           <div className="space-y-8">
