@@ -1,170 +1,106 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { getSongVersions, postSongVersions, type CreateSongVersionData, type SongVersion } from '@/api/songVersions';
-import { Music, MoreVertical } from 'lucide-react';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { getSongVersionById, getSongVersions, postSongVersions, type CreateSongVersionData, type SongVersion } from '@/api/songVersions';
+import { Music, MoreVertical, Edit3, Trash2, ReceiptText } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import SongVersionModal from '@/components/songVersionModal/modal';
 
 const SongVersions = () => {
-  const { songId } = useParams<{ songId: string }>();
+  const { songId, songVersionId } = useParams<{ songId: string, songVersionId: string }>();
   const [versions, setVersions] = useState<SongVersion[]>([]);
-  const [formData, setFormData] = useState<CreateSongVersionData>({
-    versionName: '',
-    songId: songId || '',
-    classification: '',
-    key: '',
-    linkChord: null,
-    linkVideo: null,
-  });
   const [modalOpen, setModalOpen] = useState(false);
-
-  const navigate = useNavigate();
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<SongVersion | null>(null);
 
   useEffect(() => {
-    const fetchSongVersions = async () => {
-      if (!songId) {
-        toast.error("ID da música não encontrado.");
-        return;
-      }
-
+    console.log('songVersionId:', songVersionId); 
+  
+    const fetchVersions = async () => {
       try {
-        const response = await getSongVersions(songId);
-        setVersions(response);
+        const fetchedVersions = await getSongVersions(songId!);
+        setVersions(fetchedVersions);
+  
+        
+        if (songVersionId) {
+          const versionDetails = await getSongVersionById(songId!, songVersionId);
+          setSelectedVersion(versionDetails);
+          setDetailModalOpen(true); 
+        } else {
+          console.warn('songVersionId está undefined');
+        }
       } catch (error) {
-        console.error("Failed to fetch song versions:", error);
         toast.error("Erro ao carregar as versões da música.");
       }
     };
+  
+    fetchVersions();
+  }, [songId, songVersionId]);
+  
 
-    fetchSongVersions();
-  }, [songId]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev: CreateSongVersionData) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleCreateVersion = async (data: CreateSongVersionData) => {
+    try {
+      const newVersion = await postSongVersions(songId!, data);
+      setVersions((prev) => [...prev, newVersion]);
+      toast.success("Versão criada com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao criar a versão da música.");
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!songId) {
-      toast.error("ID da música não encontrado.");
-      return;
-    }
-
+  const handleDetails = async (songVersionId: string) => {
     try {
-      const newVersion = await postSongVersions(songId, formData);
-      setVersions((prev: SongVersion[]) => [...prev, newVersion]);
-      toast.success("Versão da música criada com sucesso!");
-      setFormData({
-        versionName: '',
-        songId: songId,
-        classification: '',
-        key: '',
-        linkChord: null,
-        linkVideo: null,
-      });
-      setModalOpen(false);
+      const versionDetails = await getSongVersionById(songId!, songVersionId);
+      setSelectedVersion(versionDetails);
+      setDetailModalOpen(true);
     } catch (error) {
-      console.error("Failed to create song version:", error);
-      toast.error("Erro ao criar a versão da música.");
+      toast.error("Erro ao carregar os detalhes da versão.");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col items-center py-8">
-      <div className="w-full max-w-2xl text-center mb-8">
+      <header className="w-full max-w-2xl text-center mb-8">
         <h1 className="text-4xl font-extrabold text-orange-600 mb-3">Versões da Música</h1>
-        <p className="text-gray-600 text-lg">
-          Gerencie as versões da música de forma prática e organizada.
-        </p>
-      </div>
+        <p className="text-gray-600 text-lg">Gerencie as versões da música de forma prática e organizada.</p>
+      </header>
 
       <Button onClick={() => setModalOpen(true)} className="mb-4 bg-orange-600 text-white hover:bg-orange-700 transition duration-200">
         Adicionar Nova Versão
       </Button>
 
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogTrigger asChild>
-          <Button className="hidden">Adicionar Nova Versão</Button>
-        </DialogTrigger>
-        <DialogContent className="bg-zinc-900 text-white"> {/* Estilo do fundo do modal */}
+      <SongVersionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleCreateVersion}
+        songId={songId!}
+      />
+
+      {/* Modal para Detalhes da Versão */}
+      <Dialog open={detailModalOpen} onOpenChange={() => setDetailModalOpen(false)}>
+        <DialogContent className="bg-zinc-900 text-white">
           <DialogHeader>
-            <DialogTitle>Adicionar Nova Versão</DialogTitle>
-            <DialogDescription>
-              Preencha os detalhes da nova versão da música.
-            </DialogDescription>
+            <DialogTitle>Detalhes da Versão</DialogTitle>
+            <DialogDescription>Informações detalhadas da versão selecionada.</DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="versionName" className="block text-sm font-medium text-zinc-400">Nome da Versão</label>
-              <input
-                id="versionName"
-                type="text"
-                name="versionName"
-                value={formData.versionName}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
+          {selectedVersion && (
+            <div className="space-y-2">
+              <p><strong>Nome da Versão:</strong> {selectedVersion.versionName}</p>
+              <p><strong>Classificação:</strong> {selectedVersion.classification}</p>
+              <p><strong>Tom:</strong> {selectedVersion.key}</p>
+              <p><strong>Link do Acorde:</strong> {selectedVersion.linkChord || 'N/A'}</p>
+              <p><strong>Link do Vídeo:</strong> {selectedVersion.linkVideo || 'N/A'}</p>
+              <p><strong>Criado em:</strong> {new Date(selectedVersion.createdAt).toLocaleString()}</p>
+              <p><strong>Atualizado em:</strong> {new Date(selectedVersion.updatedAt).toLocaleString()}</p>
             </div>
-            <div>
-              <label htmlFor="classification" className="block text-sm font-medium text-zinc-400">Classificação</label>
-              <input
-                id="classification"
-                type="text"
-                name="classification"
-                value={formData.classification}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="key" className="block text-sm font-medium text-zinc-400">Tom</label>
-              <input
-                id="key"
-                type="text"
-                name="key"
-                value={formData.key}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="linkChord" className="block text-sm font-medium text-zinc-400">Link do Acorde (opcional)</label>
-              <input
-                id="linkChord"
-                type="url"
-                name="linkChord"
-                value={formData.linkChord || ''}
-                onChange={handleChange}
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="linkVideo" className="block text-sm font-medium text-zinc-400">Link do Vídeo (opcional)</label>
-              <input
-                id="linkVideo"
-                type="url"
-                name="linkVideo"
-                value={formData.linkVideo || ''}
-                onChange={handleChange}
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-            <Button type="submit" className="w-full py-2 bg-orange-600 text-white hover:bg-orange-700 transition duration-200">
-              Criar Versão
-            </Button>
-          </form>
+          )}
         </DialogContent>
       </Dialog>
 
+      {/* Lista de Versões */}
       <div className="md:w-full w-[95%] max-w-2xl mt-8">
         {versions.length === 0 ? (
           <p className="text-center text-gray-500">Nenhuma versão adicionada ainda.</p>
@@ -174,7 +110,7 @@ const SongVersions = () => {
               <Card
                 key={version.id}
                 className="bg-white shadow-lg rounded-lg transition-transform hover:scale-105 p-4 hover:shadow-xl cursor-pointer"
-                onClick={() => navigate(`/versions/${version.id}`)}
+                onClick={() => handleDetails(version.id)}
               >
                 <div className="flex items-center gap-4">
                   <Music className="h-8 w-8 text-orange-500" />
@@ -183,7 +119,26 @@ const SongVersions = () => {
                     <p className="text-sm text-gray-500">Classificação: {version.classification}</p>
                     <p className="text-sm text-gray-500">Tom: {version.key}</p>
                   </div>
-                  <MoreVertical className="h-5 w-5 text-gray-400 cursor-pointer" />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="text-gray-400 hover:text-orange-500">
+                        <MoreVertical className="h-5 w-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="gap-2 hover:bg-gray-100" onClick={() => handleDetails(version.id)}>
+                        <ReceiptText className="h-4 w-4" /> Detalhes
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="gap-2 hover:bg-gray-100">
+                        <Edit3 className="h-4 w-4" /> Editar Versão
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive gap-2 hover:bg-red-50">
+                        <Trash2 className="h-4 w-4" /> Excluir Versão
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </Card>
             ))}

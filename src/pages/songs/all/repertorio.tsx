@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Music, Edit3, Trash2, MoreVertical } from "lucide-react";
+import { Music, Edit3, Trash2, MoreVertical, BookX } from "lucide-react";
 import { deleteSong, getSongs, postSong, type CreateSongData, type Song, type UpdateSongData } from "@/api/songs";
 import { toast } from "sonner";
 import EditSongModal from "@/components/songModal/editSongModal";
@@ -128,8 +128,7 @@ export default function Repertorio() {
             {songs.map((song) => (
               <Card
                 key={song.id}
-                className="bg-white shadow-lg rounded-lg transition-transform hover:scale-105 p-4 hover:shadow-xl cursor-pointer" // Adicione cursor-pointer
-                onClick={() => navigate(`/songs/${song.id}/song-versions`)} 
+                className="bg-white shadow-lg rounded-lg transition-transform hover:scale-105 p-4 hover:shadow-xl cursor-pointer" 
               >
                 <div className="flex items-center gap-4">
                   <Music className="h-8 w-8 text-orange-500" />
@@ -148,6 +147,12 @@ export default function Repertorio() {
                       <DropdownMenuLabel>Ações</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem 
+                        onClick={() => navigate(`/songs/${song.id}/song-versions`)}
+                        className="gap-2 hover:bg-gray-100"
+                      >
+                        <BookX className="h-4 w-4" /> Ver Versões
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
                         onClick={() => handleEdit(song)} 
                         className="gap-2 hover:bg-gray-100"
                       >
@@ -160,7 +165,7 @@ export default function Repertorio() {
                         <Trash2 className="h-4 w-4" /> Excluir Música
                       </DropdownMenuItem>
                     </DropdownMenuContent>
-                  </DropdownMenu>
+                  </DropdownMenu> 
                 </div>
               </Card>
             ))}

@@ -42,3 +42,16 @@ export const getSongVersions = async (songId: string): Promise<SongVersion[]> =>
 
   return response.data;
 }
+
+export const getSongVersionById = async (songId: string, songVersionId: string): Promise<SongVersion> => {
+  const token = getCookie('token');
+
+  try {
+    const response = await api.get(`/songs/${songId}/song-versions/${songVersionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Não foi possível buscar a versão da música.");
+  }
+};

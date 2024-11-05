@@ -47,6 +47,10 @@ const router = createBrowserRouter([
         element: <SongVersions />
       },
       {
+        path: "/songs/:songId/song-versions/:songVersionId",
+        element: <SongVersions />
+      },
+      {
         path: "*", 
         element: <Navigate to="/register" replace />, 
       },
