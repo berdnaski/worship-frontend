@@ -23,6 +23,11 @@ export interface DepartmentResponse {
   users: User[];
 }
 
+export interface DepartmentUpdate {
+  name?: string; 
+  description?: string; 
+}
+
 export async function createDepartment(data: DepartmentFormData) {
   const token = getCookie('token');
   console.log('Token:', token);
@@ -43,6 +48,8 @@ export async function getDepartments() {
   return response.data;
 }
 
+
+
 export async function getDepartmentMembers(departmentId: string) {
   const token = getCookie('token');
 
@@ -52,3 +59,28 @@ export async function getDepartmentMembers(departmentId: string) {
 
   return response.data;
 }
+
+export async function updateDepartment(id: string | undefined, data: DepartmentUpdate) {
+  const token = getCookie('token');
+  
+  const response = await api.put(`/departments/${id}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+}
+
+export async function deleteDepartment(departmentId: string) {
+  const token = getCookie('token');
+  await api.delete(`/departments/${departmentId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export async function addUserToDepartment(departmentId: string, userId: string): Promise<void> {
+  const token = getCookie('token');
+  
+  await api.post(`/departments/${departmentId}/users/${userId}`, {}, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
