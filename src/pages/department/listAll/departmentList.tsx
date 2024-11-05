@@ -37,7 +37,7 @@ const DepartmentList: React.FC<DepartmentListProps> = ({ departments }) => {
 
     try {
       await deleteDepartment(departmentId);
-      setDepartmentList((prev) => prev.filter((dep) => dep.id !== departmentId)); // Atualiza o estado
+      setDepartmentList((prev) => prev.filter((dep) => dep.id !== departmentId)); 
       toast.success("Departamento excluído com sucesso!");
     } catch (error) {
       console.error("Erro ao excluir departamento:", error);
@@ -118,7 +118,7 @@ const DepartmentList: React.FC<DepartmentListProps> = ({ departments }) => {
                 setSelectedDepartment(null); 
               }} 
               department={selectedDepartment} 
-              onDepartmentUpdated={handleDepartmentUpdated} // Passa a função aqui
+              onDepartmentUpdated={handleDepartmentUpdated} 
             />
           <AddMemberModal 
             isOpen={isAddMemberModalOpen} 

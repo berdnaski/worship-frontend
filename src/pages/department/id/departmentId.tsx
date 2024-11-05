@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getDepartmentMembers, User } from "@/api/department";
 
 const DepartmentDetails: React.FC = () => {
@@ -58,9 +58,12 @@ const DepartmentDetails: React.FC = () => {
               <CardTitle className="text-lg font-semibold text-gray-800">Repertório</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:bg-gradient-to-l transition duration-200" variant="outline">
-                Ver repertório
-              </Button>
+              <Link
+                  to="/songs"
+                  className="block w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white text-center py-2 rounded hover:bg-gradient-to-l transition duration-200"
+                >
+                  Ver repertório
+              </Link>
             </CardContent>
           </Card>
           <Card className="shadow-lg transition-transform hover:scale-105">

@@ -7,6 +7,8 @@ import CreateDepartment from "./pages/department/listAll/department";
 import { Setup } from "./pages/setup/setup";
 import SetupRoute from "./routes/protected";
 import DepartmentDetails from "./pages/department/id/departmentId";
+import Repertorio from "./pages/songs/all/repertorio";
+import SongVersions from "./pages/songVersion/all/songVersion";
 
 const router = createBrowserRouter([
   {
@@ -33,8 +35,16 @@ const router = createBrowserRouter([
         element: <DepartmentDetails />
       },
       {
+        path: "/songs",
+        element: <Repertorio />
+      },
+      {
         path: "/setup",
         element: <SetupRoute><Setup /></SetupRoute>
+      },
+      {
+        path: "/songs/:songId/song-versions",
+        element: <SongVersions />
       },
       {
         path: "*", 
