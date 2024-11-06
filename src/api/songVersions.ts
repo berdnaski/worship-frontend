@@ -4,13 +4,23 @@ import api from '.'
 export interface SongVersion {
   id: string;
   versionName: string;
-  songId: string; 
   classification: string;
   key: string;
-  linkChord: string | null; 
-  linkVideo: string | null;  
+  linkChord: string; // Nova propriedade
+  linkVideo: string; // Nova propriedade
   createdAt: Date;
   updatedAt: Date;
+  songId: string;
+}
+
+
+
+export interface UpdateSongVersionData {
+  versionName?: string;
+  classification?: string;
+  key?: string;
+  linkChord?: string | null;
+  linkVideo?: string | null;
 }
 
 export interface CreateSongVersionData {
@@ -55,3 +65,21 @@ export const getSongVersionById = async (songId: string, songVersionId: string):
     throw new Error("Não foi possível buscar a versão da música.");
   }
 };
+
+export const deleteSongVersionById = async (songId: string, songVersionId: string) => {
+  const token = getCookie('token');
+  
+  await api.delete(`/songs/${songId}/song-versions/${songVersionId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export const updateSongVersionById = async (songId: string, songVersionId: string, data: UpdateSongVersionData) => {
+  const token = getCookie('token');
+
+  const response = await api.put(`/songs/${songId}/song-versions/${songVersionId}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data;
+}
