@@ -135,8 +135,8 @@ const handleEditSchedule = (schedule: Schedule) => {
             : schedule
         )
       );
-  
       toast.success('Participante adicionado com sucesso!');
+      window.location.reload();
       handleCloseAddParticipantModal();
     } catch (error) {
       console.error('Erro ao adicionar participante:', error);
