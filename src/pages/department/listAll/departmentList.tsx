@@ -16,6 +16,7 @@ import { EditDepartmentDialog } from "../update/editModal";
 import { toast } from "sonner";
 import AddMemberModal from "@/components/Modal/addMemberModal";
 
+
 interface DepartmentListProps {
   departments: DepartmentResponse[];
 }
@@ -67,6 +68,7 @@ const DepartmentList: React.FC<DepartmentListProps> = ({ departments }) => {
   const handleMemberAdded = () => {
     toast.success("Membro adicionado com sucesso!");
   };
+  
 
   return (
     <div className="grid gap-4">
@@ -120,14 +122,12 @@ const DepartmentList: React.FC<DepartmentListProps> = ({ departments }) => {
               department={selectedDepartment} 
               onDepartmentUpdated={handleDepartmentUpdated} 
             />
-          <AddMemberModal 
-            isOpen={isAddMemberModalOpen} 
-            onClose={() => {
-              setIsAddMemberModalOpen(false);
-              setSelectedDepartment(null); 
-            }} 
-            departmentId={selectedDepartment.id} 
-            onMemberAdded={handleMemberAdded} 
+          <AddMemberModal
+            isOpen={isAddMemberModalOpen}
+            onClose={() => setIsAddMemberModalOpen(false)}
+            departmentId={selectedDepartment?.id}
+            departmentMembers={selectedDepartment?.users || []} 
+            onMemberAdded={handleMemberAdded}
           />
         </>
       )}

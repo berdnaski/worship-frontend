@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getDepartmentMembers, User } from "@/api/department";
+import { getDepartmentMembers, removeUserFromDepartment, User } from "@/api/department";
+import { toast } from "sonner";
 
 const DepartmentDetails: React.FC = () => {
   const { departmentId } = useParams<{ departmentId: string }>();
@@ -46,11 +47,23 @@ const DepartmentDetails: React.FC = () => {
       .join('');
   };
 
+  const handleRemoveMember = async (memberId: string) => {
+    if (!departmentId) return;
+    try {
+      await removeUserFromDepartment(departmentId, memberId); 
+      toast.success("Membro removido com sucesso!");
+      setMembers((prevMembers) => prevMembers.filter((member) => member.id !== memberId)); // Atualizar a lista de membros
+    } catch (error) {
+      setError('Failed to remove member.');
+      toast.error("Erro ao remover membro.");
+    }
+  };
+
   if (loading) return <p className="text-center text-gray-500">Loading members...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="max-h-screen bg-white">
       <main className="container mx-auto p-6">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <Card className="shadow-lg transition-transform hover:scale-105">
@@ -71,9 +84,13 @@ const DepartmentDetails: React.FC = () => {
               <CardTitle className="text-lg font-semibold text-gray-800">Escalas</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:bg-gradient-to-l transition duration-200" variant="outline">
-                Ver escalas
-              </Button>
+              <Link
+                to={`/departments/${departmentId}/schedules`}
+              >
+                <Button className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:bg-gradient-to-l transition duration-200" variant="outline">
+                  Ver escalas
+                </Button>
+              </Link>
             </CardContent>
           </Card>
           <Card className="md:col-span-2 lg:col-span-3 shadow-lg transition-transform hover:scale-105">
@@ -128,9 +145,12 @@ const DepartmentDetails: React.FC = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Ver perfil</DropdownMenuItem>
-                          <DropdownMenuItem>Editar</DropdownMenuItem>
-                          <DropdownMenuItem>Remover</DropdownMenuItem>
+                          <Link to={`/users/${member.id}`}>
+                            <DropdownMenuItem>Ver perfil</DropdownMenuItem>
+                          </Link>
+                          <DropdownMenuItem onClick={() => handleRemoveMember(member.id)}>
+                            Remover
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>

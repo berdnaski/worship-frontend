@@ -6,13 +6,12 @@ export interface SongVersion {
   versionName: string;
   classification: string;
   key: string;
-  linkChord: string; // Nova propriedade
-  linkVideo: string; // Nova propriedade
+  songId: string; 
+  linkChord: string | null;
+  linkVideo: string | null;
   createdAt: Date;
   updatedAt: Date;
-  songId: string;
 }
-
 
 
 export interface UpdateSongVersionData {

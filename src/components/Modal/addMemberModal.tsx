@@ -9,10 +9,11 @@ interface AddMemberModalProps {
   isOpen: boolean;
   onClose: () => void;
   departmentId: string;
+  departmentMembers: UserResponse[]; 
   onMemberAdded: () => void; 
 }
 
-const AddMemberModal: React.FC<AddMemberModalProps> = ({ isOpen, onClose, departmentId, onMemberAdded }) => {
+const AddMemberModal: React.FC<AddMemberModalProps> = ({ isOpen, onClose, departmentId, departmentMembers, onMemberAdded }) => {
   const [users, setUsers] = useState<UserResponse[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -29,16 +30,13 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ isOpen, onClose, depart
     fetchUsers();
   }, []);
 
+  const availableUsers = users.filter(user => 
+    !departmentMembers.some(member => member.id === user.id) 
+  );
+
   const handleAddMember = async () => {
     if (!selectedUserId) return;
-    
-    const isUserInDepartment = users.find(user => user.id === selectedUserId && user.departmentId === departmentId);
-  
-    if (isUserInDepartment) {
-      toast.error("Este membro já está no departamento.");
-      return;
-    }
-  
+
     try {
       await addUserToDepartment(departmentId, selectedUserId);
       toast.success("Membro adicionado com sucesso!");
@@ -65,7 +63,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({ isOpen, onClose, depart
           value={selectedUserId || ""}
         >
           <option value="">Selecione um usuário</option>
-          {users.map(user => (
+          {availableUsers.map(user => (
             <option key={user.id} value={user.id}>
               {user.name}
             </option>

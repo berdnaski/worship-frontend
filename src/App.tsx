@@ -9,6 +9,9 @@ import SetupRoute from "./routes/protected";
 import DepartmentDetails from "./pages/department/id/departmentId";
 import Repertorio from "./pages/songs/all/repertorio";
 import SongVersions from "./pages/songVersion/all/songVersion";
+import { Perfil } from "./pages/perfil/perfil";
+import Schedule from "./pages/schedules/schedules";
+import ScheduleDetails from "./pages/schedules/id";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +53,18 @@ const router = createBrowserRouter([
         path: "/songs/:songId/song-versions/:songVersionId",
         element: <SongVersions />
       },
+      {
+        path: "/users/:userId",
+        element: <Perfil />
+      },
+      {
+        path: "/departments/:departmentId/schedules",
+        element: <Schedule />
+      },
+      {
+        path: "/departments/:departmentId/schedules/:scheduleId",
+        element: <ScheduleDetails />
+      },   
       {
         path: "*", 
         element: <Navigate to="/register" replace />, 

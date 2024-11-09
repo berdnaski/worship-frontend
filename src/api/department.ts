@@ -84,3 +84,21 @@ export async function addUserToDepartment(departmentId: string, userId: string):
   });
 }
 
+export async function removeUserFromDepartment(departmentId: string, userId: string): Promise<void> {
+  const token = getCookie('token');
+
+  await api.delete(`/departments/${departmentId}/users/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export async function getDepartmentById(departmentId: string) {
+  const token = getCookie('token');
+
+  const response = await api.get(`/departments/${departmentId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return response.data;
+}
+

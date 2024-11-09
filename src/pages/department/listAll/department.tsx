@@ -19,13 +19,13 @@ export default function CreateDepartment() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchDepartments(); // Busca departamentos ao carregar o componente
+    fetchDepartments(); 
   }, []);
   
   const fetchDepartments = async () => {
     try {
       const data = await getDepartments(); 
-      console.log("Departamentos carregados:", data); // Adicione esta linha
+      console.log("Departamentos carregados:", data); 
       setDepartments(data); 
     } catch (error) {
       console.error("Erro ao carregar departamentos:", error);
@@ -51,7 +51,7 @@ export default function CreateDepartment() {
     try {
       const newDepartment = await createDepartment(dataToSubmit);
       toast.success("Departamento criado com sucesso!");
-      setDepartments((prev) => [...prev, newDepartment]); // Atualiza a lista localmente
+      setDepartments((prev) => [...prev, newDepartment]); 
       setModalOpen(false);
       navigate("/departments"); 
     } catch (error) {

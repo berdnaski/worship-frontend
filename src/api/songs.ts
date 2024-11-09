@@ -10,6 +10,12 @@ export interface Song {
   updatedAt: string;
 }
 
+export interface SongResponse {
+  title: string;
+  artist: string;
+  genre?: string;
+}
+
 export type UpdateSongData = {
   title?: string;
   artist?: string;

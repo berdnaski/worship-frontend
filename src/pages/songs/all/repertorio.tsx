@@ -173,7 +173,6 @@ export default function Repertorio() {
         )}
       </div>
 
-      {/* Renderiza o modal de edição */}
       {selectedSong && (
         <EditSongModal 
           open={isModalOpen} 

@@ -15,7 +15,7 @@ interface EditSongVersionModalProps {
 
 const EditSongVersionModal: React.FC<EditSongVersionModalProps> = ({ open, onClose, songId, songVersion, onUpdate }) => {
   if (!songVersion) {
-    return null; 
+    return null; // Early return if songVersion is null
   }
 
   const [formData, setFormData] = useState<UpdateSongVersionData>({
